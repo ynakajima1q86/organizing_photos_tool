@@ -1,0 +1,53 @@
+set photo_Folder to choose folder
+tell application "Finder"
+	
+	set every_photo_files to every file of photo_Folder
+	
+end tell
+
+repeat with photo_file in every_photo_files
+	
+	set photo_info to photo_file
+	
+	set extension_info to name extension of photo_info
+	
+	if extension_info = "jpg" or extension_info = "png" then
+		
+		set create_date to get creation date of (photo_info)
+		
+		set year_info to year of (create_date) as integer
+		set month_info to month of (create_date) as integer
+		set date_info to day of (create_date) as integer
+		
+		set month_info to "0" & month_info as string
+		set date_info to "0" & date_info as string
+		
+		if length of month_info = 3 then
+			
+			set month_info to text 2 thru 3 of month_info as string
+			
+		end if
+		
+		if length of date_info = 3 then
+			
+			set date_info to text 2 thru 3 of date_info as string
+			
+		end if
+		
+		set folder_name to year_info & month_info & date_info as string
+		
+		tell application "Finder"
+			
+			try
+				
+				make new folder at photo_Folder with properties {name:folder_name}
+				
+			end try
+			
+			move photo_file to folder folder_name of folder photo_Folder
+			
+		end tell
+		
+	end if
+	
+end repeat
